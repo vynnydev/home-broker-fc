@@ -6,9 +6,9 @@ import (
 	"sync"
 
 	ckafka "github.com/confluentinc/confluent-kafka-go/kafka"
-	"github.com/vynnydev/homebroker/packages/microservices/market/infra/kafka"
 	"github.com/vynnydev/homebroker/packages/microservices/market/domain/dtos"
 	"github.com/vynnydev/homebroker/packages/microservices/market/domain/entity"
+	"github.com/vynnydev/homebroker/packages/microservices/market/infra/kafka"
 	"github.com/vynnydev/homebroker/packages/microservices/market/transformer"
 )
 
@@ -21,6 +21,10 @@ func main() {
 	kafkaMsgChan := make(chan *ckafka.Message)
 	configMap := &ckafka.ConfigMap{
 		"bootstrap.servers": "pkc-ymrq7.us-east-2.aws.confluent.cloud:9092",
+		"security.protocol": "SASL_SSL",
+		"sasl.mechanisms": "PLAIN",
+		"sasl.username": "QOHX6MMYFI46OSQO",
+		"sasl.password": "1iZ2GLkvqIr0MnTM8hLeXlPoqnNdbNjZR0xEr2rpHB+7o6xe2i45BojezNl7mvhE",
 		"group.id":          "myGroup",
 		"auto.offset.reset": "latest",
 	}
