@@ -49,7 +49,16 @@ export class OrdersService {
     })
 
     // publicar no kafka
-    this.kafkaClient.emit('input', order)
+    this.kafkaClient.emit('input', {
+      order_id: order.id,
+      investor_id: order.wallet_id,
+      asset_id: order.asset_id,
+      // current_shares: order.shares,
+      shares: order.shares,
+      price: order.price,
+      order_type: order.type,
+    })
+
     return order
   }
 
