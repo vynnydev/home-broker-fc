@@ -1,5 +1,5 @@
-import MyWallet from '@/components/MyWallet'
-import DefaultNavbar from '@/components/NavBar'
+import MyWallet from '@/presentation/components/MyWallet'
+import DefaultNavbar from '@/presentation/components/NavBar'
 
 export default function HomePageBroker({
   params,

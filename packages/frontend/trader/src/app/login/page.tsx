@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable camelcase */
 'use client'
-import { WalletAsset } from '@/core/domain/models'
+import { WalletAsset } from '@/core/application/domain/models'
 import { toast } from 'react-hot-toast'
-import api from '@/core/infra/http/api'
+import api from '@/infra/http/api'
 import Image from 'next/image'
 import { redirect } from 'next/navigation'
 import { useCallback, useState } from 'react'

@@ -1,14 +1,21 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable camelcase */
-import { AssetChartComponent } from '@/components/AssetChartComponent'
-import MyOrders from '@/components/MyOrders'
-// import MyWallet from '@/components/MyWallet'
-import { OrderForm } from '@/components/OrderForm'
-import { SyncOrders } from '@/components/SyncOrders'
-import DefaultNavbar from '@/components/NavBar'
+import { AssetChartComponent } from '@/presentation/components/AssetChartComponent'
+import MyOrders from '@/presentation/components/MyOrders'
+// import MyWallet from '@/presentation/components/MyWallet'
+import { OrderForm } from '@/presentation/components/OrderForm'
+import { SyncOrders } from '@/presentation/components/SyncOrders'
+import DefaultNavbar from '@/presentation/components/NavBar'
 
-import { TabsGroup, TabsItem, Card } from '@/components/flowbite-components'
-import { HiShoppingCart, HiArrowUp } from '@/components/react-icons/hi'
+import {
+  TabsGroup,
+  TabsItem,
+  Card,
+} from '@/presentation/components/flowbite-components'
+import {
+  HiShoppingCart,
+  HiArrowUp,
+} from '@/presentation/components/react-icons/hi'
 
 export default async function page({
   params,

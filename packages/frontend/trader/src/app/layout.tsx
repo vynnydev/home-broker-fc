@@ -1,7 +1,7 @@
 import React from 'react'
-import '../styles/globals.css'
+import '@/presentation/styles/globals.css'
 
-import FlowbiteContext from '@/components/FlowbiteContext'
+import FlowbiteContext from '@/presentation/components/FlowbiteContext'
 
 export const metadata = {
   title: 'Trader',
