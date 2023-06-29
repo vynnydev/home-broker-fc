@@ -12,9 +12,9 @@ async function initTransaction(formData: FormData) {
   const wallet_id = formData.get('wallet_id')
   const type = formData.get('type')
 
-  console.log(`http://localhost:8000/wallets/${wallet_id}/orders`)
+  console.log(`http://localhost:3000/wallets/${wallet_id}/orders`)
   const response = await fetch(
-    `http://localhost:8000/wallets/${wallet_id}/orders`,
+    `http://localhost:3000/wallets/${wallet_id}/orders`,
     {
       headers: {
         'Content-Type': 'application/json',
@@ -46,7 +46,6 @@ export function OrderForm(props: {
 }) {
   return (
     <div>
-      <h1>Order Form</h1>
       <form action={initTransaction}>
         <input name="asset_id" type="hidden" defaultValue={props.asset_id} />
         <input name="wallet_id" type="hidden" defaultValue={props.wallet_id} />

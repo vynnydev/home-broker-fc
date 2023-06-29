@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable array-callback-return */
 /* eslint-disable camelcase */
-import Link from 'next/link'
-import { WalletAsset } from '@/core/domain/models'
+'use client'
+
+import { WalletAsset, Asset } from '@/core/domain/models'
 import {
   Table,
   TableBody,
@@ -10,26 +12,85 @@ import {
   TableHeadCell,
   TableRow,
 } from './flowbite-components'
-// import { isHomeBrokerClosed } from '@/utils/BrokerClosed'
 
-// Server Components => micro renderizações (cache)
-async function getWalletAssets(wallet_id: string): Promise<WalletAsset[]> {
-  const response = await fetch(
-    `http://localhost:8000/wallets/${wallet_id}/assets`,
-    {
-      // cache: 'no-store', processamento sempre dinâmico
-      next: {
-        tags: [`orders-wallet-${wallet_id}`],
-        // revalidate: isHomeBrokerClosed() ? 60 * 60 : 5,
-        revalidate: 1,
-      },
-    },
-  )
-  return response.json()
-}
+import Link from 'next/link'
+import { fetcher } from '@/utils/BrokerClosed'
+import useSWR from 'swr'
+import useSWRSubscription, { SWRSubscriptionOptions } from 'swr/subscription'
 
 export default async function MyWallet(props: { wallet_id: string }) {
-  const walletAssets = await getWalletAssets(props.wallet_id)
+  const { data: walletAssets, mutate: mutateWalletAssets } = useSWR<
+    WalletAsset[]
+  >(`http://localhost:3000/api/wallets/${props.wallet_id}/assets`, fetcher, {
+    fallbackData: [],
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  })
+
+  const { data: assetChanged } = useSWRSubscription(
+    `http://localhost:3000/assets/events`,
+    (path, { next }: SWRSubscriptionOptions) => {
+      const eventSource = new EventSource(path)
+      eventSource.addEventListener('asset-price-changed', async (event) => {
+        console.log(event)
+        const assetChanged: Asset = JSON.parse(event.data)
+        await mutateWalletAssets((prev) => {
+          const foundIndex = prev!.findIndex(
+            (walletAsset) => walletAsset.asset_id === assetChanged.id,
+          )
+
+          if (foundIndex !== -1) {
+            prev![foundIndex].Asset.price = assetChanged.price
+          }
+          console.log(prev)
+          return [...prev!]
+        }, false)
+        next(null, assetChanged)
+      })
+
+      eventSource.onerror = (event) => {
+        console.error(event)
+        eventSource.close()
+      }
+      return () => {
+        console.log('close event source')
+        eventSource.close()
+      }
+    },
+    {},
+  )
+
+  const { data: walletAssetUpdated } = useSWRSubscription(
+    `http://localhost:3000/wallets/${props.wallet_id}/assets/events`,
+    (path, { next }: SWRSubscriptionOptions) => {
+      const eventSource = new EventSource(path)
+
+      eventSource.addEventListener('wallet-asset-updated', async (event) => {
+        const walletAssetUpdated: WalletAsset = JSON.parse(event.data)
+        console.log(walletAssetUpdated)
+        await mutateWalletAssets((prev) => {
+          const foundIndex = prev?.findIndex(
+            (walletAsset) =>
+              walletAsset.asset_id === walletAssetUpdated.asset_id,
+          )
+          if (foundIndex !== -1) {
+            console.log('entrou aqui')
+            prev![foundIndex!].shares = walletAssetUpdated.shares
+          }
+
+          return [...prev!]
+        }, false)
+        next(null, walletAssetUpdated)
+      })
+      eventSource.onerror = (error) => {
+        console.error(error)
+        eventSource.close()
+      }
+      return () => {
+        eventSource.close()
+      }
+    },
+  )
 
   return (
     <Table>
@@ -63,3 +124,5 @@ export default async function MyWallet(props: { wallet_id: string }) {
     </Table>
   )
 }
+// Server Components
+// Client Components

@@ -18,10 +18,10 @@ async function bootstrap() {
           password:
             '1iZ2GLkvqIr0MnTM8hLeXlPoqnNdbNjZR0xEr2rpHB+7o6xe2i45BojezNl7mvhE',
         },
-      }
+      },
     },
   })
-  
+
   await app.startAllMicroservices()
   await app.listen(3000)
 }

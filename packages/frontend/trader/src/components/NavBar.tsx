@@ -14,7 +14,7 @@ export default function DefaultNavbar() {
       <Navbar.Brand href="https://flowbite-react.com">
         <Image
           className="mr-3 h-6 sm:h-9"
-          alt="Full Cycle Invest"
+          alt="K8S Invest"
           src="/logo.png"
           width={37}
           height={40}
